@@ -17,6 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($obj as $arr => $key) {
         $data[$arr] = $key;
     }
-
-    echo $database->insertData($data["SKU"], $data["Name"], $data["Price"], $data["Properties"]);
+    $checkIfAlreadyExists = $database->selectBySKU($data["SKU"]);
+    if (count($checkIfAlreadyExists) > 0) {
+        echo "Such an SKU already exists";
+    } else {
+        echo $database->insertData($data["SKU"], $data["Name"], $data["Price"], $data["Properties"]);
+    }
 }

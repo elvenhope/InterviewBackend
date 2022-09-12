@@ -61,6 +61,26 @@ class Database implements ValidDB {
         }
         return "Succesfully Deleted";
     }
+    public function selectBySKU(string $id) {
+        $stmt = $this->conn->prepare("SELECT * FROM products WHERE SKU=?");
+        $stmt->bind_param('s', $id);
+        $result = $stmt->execute();
+        if($result) {
+            $QueryResult = $stmt->get_result();
+            if ($QueryResult->num_rows > 0) {
+                // output data of each row
+                $rows = array();
+                while ($row = $QueryResult->fetch_assoc()) {
+                    array_push($rows, $row);
+                }
+                return $rows;
+            } else {
+                return "0 results";
+            }
+        } else {
+            return "Error!";
+        }
+    }
 }
 
 $database = new Database($servername, $username, $password, $dbName);
