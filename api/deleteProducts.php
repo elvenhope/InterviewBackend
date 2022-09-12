@@ -1,12 +1,14 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 
 header('Access-Control-Allow-Methods: POST');
 
 header("Access-Control-Allow-Headers: content-type");
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // collect value of input field
+
     require "../classes/db.php";
 
     $json = file_get_contents('php://input');
@@ -18,5 +20,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data[$arr] = $key;
     }
 
-    echo $database->insertData($data["SKU"], $data["Name"], $data["Price"], $data["Properties"]);
+    echo $database->deleteData($data);
 }

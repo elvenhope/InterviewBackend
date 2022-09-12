@@ -49,6 +49,18 @@ class Database implements ValidDB {
             return "Error";
         }
     }
+    public function deleteData(array $idArray) {
+        foreach ($idArray as $key => $value) {
+            $stmt = $this->conn->prepare("DELETE FROM products WHERE id=?");
+            $stmt->bind_param('s', $value);
+            if ($stmt->execute()) {
+                //All is good;
+            } else {
+                return "Error at" . $value;
+            }
+        }
+        return "Succesfully Deleted";
+    }
 }
 
 $database = new Database($servername, $username, $password, $dbName);
