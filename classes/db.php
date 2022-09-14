@@ -7,7 +7,8 @@ $username = "root";
 $password = "Codeforlife1!";
 $dbName = "MainDB";
 
-class Database implements ValidDB {
+class Database implements ValidDB
+{
     private $conn;
 
     public function __construct(string $servername, string $username, string $password, string $dbName)
@@ -39,17 +40,19 @@ class Database implements ValidDB {
             return "0 results";
         }
     }
-    public function insertData(string $SKU, string $Name, string $Price, string $Properties) {
+    public function insertData(string $SKU, string $Name, string $Price, string $Properties)
+    {
         //$sql = "INSERT INTO products(SKU,Name,Price,Properties) VALUES(" . $SKU . ',' . $Name . ',' . $Price . ',' . $Properties . ');';
         $stmt = $this->conn->prepare("INSERT INTO products (SKU,Name,Price,Properties) VALUES (?, ?, ?, ?)");
         $stmt->bind_param('ssss', $SKU, $Name, $Price, $Properties);
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
             return "Succesfully Added";
         } else {
             return "Error";
         }
     }
-    public function deleteData(array $idArray) {
+    public function deleteData(array $idArray)
+    {
         foreach ($idArray as $key => $value) {
             $stmt = $this->conn->prepare("DELETE FROM products WHERE id=?");
             $stmt->bind_param('s', $value);
@@ -61,21 +64,22 @@ class Database implements ValidDB {
         }
         return "Succesfully Deleted";
     }
-    public function selectBySKU(string $id) {
+    public function selectBySKU(string $id)
+    {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE SKU=?");
         $stmt->bind_param('s', $id);
         $result = $stmt->execute();
-        if($result) {
+        if ($result) {
             $QueryResult = $stmt->get_result();
+            $rows = array();
             if ($QueryResult->num_rows > 0) {
                 // output data of each row
-                $rows = array();
                 while ($row = $QueryResult->fetch_assoc()) {
                     array_push($rows, $row);
                 }
                 return $rows;
             } else {
-                return "0 results";
+                return $rows;
             }
         } else {
             return "Error!";
